@@ -1,24 +1,25 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Register DFdbContext with DI
+builder.Services.AddDbContext<dairyFarm.DbContexts.DFdbContext>(options =>
+    options.UseSqlServer(connectionString)); 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5174")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
     });
 });
 
-
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -37,5 +38,5 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
-
+app.Logger.LogInformation($"Connection String: {connectionString}");
 app.Run();
