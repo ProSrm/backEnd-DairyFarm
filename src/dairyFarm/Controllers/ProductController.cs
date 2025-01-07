@@ -15,20 +15,27 @@ namespace dairyFarm.Controllers
         public ProductController(DFdbContext context)
         {
             _context = context;
-        }
-        private static List<Product> products = new List<Product>
-        {
-            new Product { Id = 1, Name = "Product 1", Price = 10.99m },
-            new Product { Id = 2, Name = "Product 2", Price = 15.99m },
-            new Product { Id = 3, Name = "Product 3", Price = 22.99m }
-        };
+        }        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var products = await _context.Products.ToListAsync();
+
             return Ok(products);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProductById(long id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
+        }
 
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
