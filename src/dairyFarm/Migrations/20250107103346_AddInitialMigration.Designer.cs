@@ -11,8 +11,8 @@ using dairyFarm.DbContexts;
 namespace dairyFarm.Migrations
 {
     [DbContext(typeof(DFdbContext))]
-    [Migration("20250107065527_AddProductTable")]
-    partial class AddProductTable
+    [Migration("20250107103346_AddInitialMigration")]
+    partial class AddInitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,19 +27,23 @@ namespace dairyFarm.Migrations
             modelBuilder.Entity("dairyFarm.Entity.Product", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id", "Name");
+                    b.HasKey("Id");
 
                     b.ToTable("Products", "df");
                 });

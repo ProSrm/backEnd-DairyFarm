@@ -17,7 +17,7 @@ namespace dairyFarm.TypeConfig
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.ToTable(_tableName, _schemaName);
-            builder.HasKey(k => new { k.Id, k.Name });
+            builder.Property(k => k.Id).ValueGeneratedOnAdd();
         }
     }
 }
