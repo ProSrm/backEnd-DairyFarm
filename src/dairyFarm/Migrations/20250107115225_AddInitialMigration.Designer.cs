@@ -11,7 +11,7 @@ using dairyFarm.DbContexts;
 namespace dairyFarm.Migrations
 {
     [DbContext(typeof(DFdbContext))]
-    [Migration("20250107103346_AddInitialMigration")]
+    [Migration("20250107115225_AddInitialMigration")]
     partial class AddInitialMigration
     {
         /// <inheritdoc />
@@ -33,7 +33,9 @@ namespace dairyFarm.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

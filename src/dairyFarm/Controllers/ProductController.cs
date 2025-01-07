@@ -39,7 +39,7 @@ namespace dairyFarm.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
-        {
+            {
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetProducts), new { id = product.Id }, product);
