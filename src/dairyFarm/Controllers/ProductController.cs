@@ -46,7 +46,7 @@ namespace dairyFarm.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProduct(int id)
+        public async Task<ActionResult> DeleteProduct(long id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
