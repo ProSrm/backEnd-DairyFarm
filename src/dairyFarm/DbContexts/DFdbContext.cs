@@ -8,6 +8,7 @@ namespace dairyFarm.DbContexts
     public class DFdbContext : DbContext
     {
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<Login> Login { get; set; } = null!;
 
         public DFdbContext(DbContextOptions options) : base(options)
         {
@@ -16,7 +17,7 @@ namespace dairyFarm.DbContexts
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ProductEntityTypeConfiguration(nameof(Products), DatabaseConstants.DfSchema));
-
+            modelBuilder.ApplyConfiguration(new LoginEntityTypeConfiguration(nameof(Login), DatabaseConstants.DfSchema));
         }
     }
 }
