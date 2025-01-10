@@ -1,14 +1,23 @@
+using dairyFarm.Constants;
+using dairyFarm.DbContexts;
+using dairyFarm.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
 
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string migrationTableName = DatabaseConstants.DfMigrationHistory;
+string migrationSchemaName = DatabaseConstants.DfSchema;
 
-// Register DFdbContext with DI
-builder.Services.AddDbContext<dairyFarm.DbContexts.DFdbContext>(options =>
-    options.UseSqlServer(connectionString)); 
+
+builder.Services.AddDatabaseContext<DFdbContext>(connectionString, migrationTableName, migrationSchemaName);
+
+var dbContext = builder.Services.BuildServiceProvider().GetRequiredService<DFdbContext>();
+dbContext.Database.Migrate();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -33,10 +42,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowReactApp");
-
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Logger.LogInformation($"Connection String: {connectionString}");
+
 app.Run();
